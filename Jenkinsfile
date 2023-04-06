@@ -31,6 +31,12 @@ pipeline {
           }
         }
       }
+
+      stage('Sonarqube Test - SAST') {
+        steps {
+          sh "mvn clean verify sonar:sonar -Dsonar.projectKey=devsecops-numeric-application -Dsonar.projectName='devsecops-numeric-application' -Dsonar.host.url=http://192.168.18.154:9000 -Dsonar.token=sqp_d51393f0240351954da2dbbc030d01501792fb15"
+        }
+      }
       stage('Docker build and push') {
           steps {
             withDockerRegistry([credentialsId: "docker-hub", url: ""]){
