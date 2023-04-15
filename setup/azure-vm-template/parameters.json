@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "location": {
-            "value": "eastus"
+            "value": "eastasia"
         },
         "networkInterfaceName": {
             "value": "devsecops-cloud801"
@@ -126,7 +126,7 @@
             "value": "devsecops"
         },
         "adminPassword": {
-            "value": null
+            "value": "Extreme#69104"
         }
     }
 }
