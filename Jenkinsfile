@@ -5,7 +5,7 @@ pipeline {
       stage('Build Artifact') {
             steps {
               sh "mvn clean package -DskipTests=true"
-              archive 'target/*.jar' //so that they can be downloaded later. Artefact is genertated here.
+              archiveArtifacts artifacts: 'target/*.jar', allowEmptyArchive: true //so that they can be downloaded later. Artefact is genertated here.
             }
         }   
       stage('Unit Tests') {
@@ -23,6 +23,7 @@ pipeline {
             steps {
               withDockerRegistry([credentialsId: "docker-hub", url: ""]){
                 sh "printenv"
+                sh "sudo chmod 666 /var/run/docker.sock"
                 sh "docker build -t resonantitsolutions/numeric-app:'$GIT_COMMIT' ."
                 sh "docker push resonantitsolutions/numeric-app:'$GIT_COMMIT'"
               }
