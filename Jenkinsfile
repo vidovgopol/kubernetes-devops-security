@@ -21,14 +21,12 @@ pipeline {
         }   
       stage('Docker Build and Push') {
             steps {
-              docker.withRegistry([credentialsId: "docker-hub", url: ""]){
-              sh "printenv"
-              sh "docker build -t resonantitsolutions/numeric-app:'$GIT_COMMIT' ."
-              sh "docker push resonantitsolutions/numeric-app:'$GIT_COMMIT'"
+              withDockerRegistry([credentialsId: "docker-hub", url: ""]){
+                sh "printenv"
+                sh "docker build -t resonantitsolutions/numeric-app:'$GIT_COMMIT' ."
+                sh "docker push resonantitsolutions/numeric-app:'$GIT_COMMIT'"
               }
             }
         }   
-
-
     }
 }
