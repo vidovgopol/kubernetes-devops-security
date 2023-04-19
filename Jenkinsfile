@@ -23,7 +23,6 @@ pipeline {
             steps {
               withDockerRegistry([credentialsId: "docker-hub", url: ""]){
                 sh "printenv"
-                sh "sudo chmod 666 /var/run/docker.sock"
                 sh "docker build -t resonantitsolutions/numeric-app:'$GIT_COMMIT' ."
                 sh "docker push resonantitsolutions/numeric-app:'$GIT_COMMIT'"
               }
