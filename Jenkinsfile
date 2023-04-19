@@ -8,5 +8,11 @@ pipeline {
               archive 'target/*.jar' //so that they can be downloaded later. Artefact is genertated here.
             }
         }   
+      stage('Unit Tests') {
+            steps {
+              sh "mvn test"
+            }
+        }   
+
     }
 }
