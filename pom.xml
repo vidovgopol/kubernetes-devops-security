@@ -78,6 +78,16 @@
 					<version>0.12</version>
 				</dependency>
 			</dependencies>
+			<configuration>
+				<mutators>
+					<mutator>ALL</mutator>
+				</mutators>
+				<mutationThreshold>70</mutationThreshold>
+				<outputFormats>
+					<value>XML</value>
+					<value>HTML</value>
+				</outputFormats>				
+			</configuration>
 			</plugin>
 		</plugins>
 	</build>
