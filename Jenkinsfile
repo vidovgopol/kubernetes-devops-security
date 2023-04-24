@@ -33,7 +33,7 @@ pipeline {
       stage("build & SonarQube analysis-SAST") {
         agent any
         steps {
-          withSonarQubeEnv('My SonarQube Server') {
+          withSonarQubeEnv('CloudOps SonarQube') {
             sh 'mvn clean package sonar:sonar'
           }
         }
