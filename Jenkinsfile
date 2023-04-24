@@ -33,9 +33,10 @@ pipeline {
       stage("build & SonarQube analysis-SAST") {
         agent any
         steps {
-          withSonarQubeEnv('CloudOps SonarQube') {
-            sh 'mvn clean package sonar:sonar'
-          }
+          // withSonarQubeEnv('CloudOps SonarQube') {
+          //   sh 'mvn clean package sonar:sonar'
+          // }
+          sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application' -Dsonar.host.url=http://cloudops.eastasia.cloudapp.azure.com:9000  -Dsonar.token=sqp_5df036aaed5eb576271d3664f336d9327a6fdfcf"
         }
       }
       stage("Quality Gate") {
