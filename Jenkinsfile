@@ -30,13 +30,21 @@ pipeline {
               }
             }
         }   
-      stage('SonarQube Analysis - SAST') {
-            steps {
-              withSonarQubeEnv() {
-                sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application'"
-              }
-            }
-        } 
+      stage("build & SonarQube analysis-SAST") {
+        agent any
+        steps {
+          withSonarQubeEnv('My SonarQube Server') {
+            sh 'mvn clean package sonar:sonar'
+          }
+        }
+      }
+      stage("Quality Gate") {
+        steps {
+          timeout(time: 1, unit: 'HOURS') {
+            waitForQualityGate abortPipeline: true
+          }
+        }
+      }
       stage('Docker Build and Push') {
             steps {
               withDockerRegistry([credentialsId: "docker-hub", url: ""]){
