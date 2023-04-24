@@ -1,7 +1,7 @@
 version: "3"
 services:
   SonarQube:
-    image: SonarQube:latest
+    image: sonarqube:latest
     depends_on:
       - db
     environment:
@@ -15,7 +15,7 @@ services:
     ports:
       - "9000:9000"
   db:
-    image: postgres:12
+    image: postgres:15
     environment:
       POSTGRES_USER: sonartest
       POSTGRES_PASSWORD: sonartesrt

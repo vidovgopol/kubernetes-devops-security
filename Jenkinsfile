@@ -30,7 +30,14 @@ pipeline {
               }
             }
         }   
-
+      stage('SonarQube Analysis - SAST') {
+            steps {
+              def mvn = tool 'Default Maven';
+              withSonarQubeEnv() {
+                sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application'"
+              }
+            }
+        } 
       stage('Docker Build and Push') {
             steps {
               withDockerRegistry([credentialsId: "docker-hub", url: ""]){
