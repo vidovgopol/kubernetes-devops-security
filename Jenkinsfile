@@ -58,7 +58,7 @@ pipeline {
             steps {
               echo "I'm inside docker stage. Printing below environment variables"
               sh "printenv"
-
+              echo "Check these messages"
               withDockerRegistry([credentialsId: "docker-hub", url: ""]){
                 sh "printenv"
                 // Run These two below commands into the VM first to get docker login successful  
