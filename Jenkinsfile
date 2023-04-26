@@ -53,8 +53,7 @@ pipeline {
       //       waitForQualityGate abortPipeline: true
       //     }
       //   }
-      // }
-      
+      // }      
       stage('Docker Build and Push') {
             steps {
               echo "I'm inside docker stage. Printing below environment variables"
