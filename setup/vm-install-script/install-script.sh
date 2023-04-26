@@ -74,6 +74,10 @@ systemctl enable jenkins
 sudo systemctl start jenkins
 #sudo systemctl status jenkins
 sudo usermod -a -G docker jenkins
+sudo chmod 666 /var/run/docker.sock
 echo "jenkins ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
+echo ".........----------------#################._.-.-SONARQUBE-.-._.#################----------------........."
+
+docker run -d --name sonarqube -p 9000:9000 -p 9092:9092 sonarqube
 echo ".........----------------#################._.-.-COMPLETED-.-._.#################----------------........."

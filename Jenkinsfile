@@ -56,6 +56,9 @@ pipeline {
       // }
       stage('Docker Build and Push') {
             steps {
+              echo "I'm inside docker stage. Printing below environment variables"
+              sh "printenv"
+
               withDockerRegistry([credentialsId: "docker-hub", url: ""]){
                 sh "printenv"
                 // Run These two below commands into the VM first to get docker login successful  
