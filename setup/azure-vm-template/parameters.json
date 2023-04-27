@@ -3,16 +3,16 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "location": {
-            "value": "eastus"
+            "value": "eastasia"
         },
         "networkInterfaceName": {
-            "value": "devsecops-cloud801"
+            "value": "devsecops-cloud-new801"
         },
         "enableAcceleratedNetworking": {
             "value": true
         },
         "networkSecurityGroupName": {
-            "value": "devsecops-cloud-nsg"
+            "value": "devsecops-cloud-new-nsg"
         },
         "networkSecurityGroupRules": {
             "value": [
@@ -52,7 +52,7 @@
             "value": "default"
         },
         "virtualNetworkName": {
-            "value": "devsecops-cloud_group-vnet"
+            "value": "devsecops-cloud-new_group-vnet"
         },
         "addressPrefixes": {
             "value": [
@@ -70,7 +70,7 @@
             ]
         },
         "publicIpAddressName": {
-            "value": "devsecops-cloud-ip"
+            "value": "devsecops-cloud-new-ip"
         },
         "publicIpAddressType": {
             "value": "Static"
@@ -79,13 +79,13 @@
             "value": "Basic"
         },
         "virtualMachineName": {
-            "value": "devsecops-cloud"
+            "value": "devsecops-cloud-new"
         },
         "virtualMachineComputerName": {
-            "value": "devsecops-cloud"
+            "value": "devsecops-cloud-new"
         },
         "virtualMachineRG": {
-            "value": "devsecops-cloud_group"
+            "value": "devsecops-cloud-new_group"
         },
         "osDiskType": {
             "value": "StandardSSD_LRS"
@@ -98,7 +98,7 @@
                     "caching": "ReadOnly",
                     "writeAcceleratorEnabled": false,
                     "id": null,
-                    "name": "devsecops-cloud_DataDisk_0",
+                    "name": "devsecops-cloud-new_DataDisk_0",
                     "storageAccountType": null,
                     "diskSizeGB": null,
                     "diskEncryptionSet": null
@@ -108,7 +108,7 @@
         "dataDiskResources": {
             "value": [
                 {
-                    "name": "devsecops-cloud_DataDisk_0",
+                    "name": "devsecops-cloud-new_DataDisk_0",
                     "sku": "StandardSSD_LRS",
                     "properties": {
                         "diskSizeGB": 512,
@@ -126,7 +126,7 @@
             "value": "devsecops"
         },
         "adminPassword": {
-            "value": null
+            "value": "Extreme#69104"
         }
     }
 }
