@@ -22,7 +22,7 @@ pipeline {
     
       stage('image push') {
             steps {
-              withDockerRegistry([credentialsID:'dockerhub', url:""]) {
+              withDockerRegistry([credentialsId:'dockerhub', url:""]) {
                 sh "printenv"
                 sh 'docker build -t kumard31/numeric-app:""$GIT_COMMIT"" .'
                 sh 'docker push kumard31/numeric-app:""$GIT_COMMIT""'
@@ -32,7 +32,7 @@ pipeline {
 
       stage('k8s deployment') {
             steps {
-              withKubeConfig([credentialsID:'kubeconfig']) {
+              withKubeConfig([credentialsId:'kubeconfig']) {
                 sh "sed -i 's#replace#kumard31/numeric-app:${GIT_COMMIT}#g k8s_deployment_service.yaml"
                 sh 'kubectl apply -f k8s_deployment_service.yaml'
               }
