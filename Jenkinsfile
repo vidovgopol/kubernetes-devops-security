@@ -5,7 +5,7 @@ pipeline {
       stage('Build Artifact') {
             steps {
               sh "mvn clean package -DskipTests=true"
-              archive 'target/*.jar' //that they can be downloaded later
+              archive 'target/*.jar' //so that they can be downloaded later
             }
         }
       stage('test phase') {
@@ -21,13 +21,13 @@ pipeline {
         }    
     
       stage('image push') {
-              steps {
-                docker.withRegistry('dockerhub') {
-                  sh "printenv"
-                  sh 'docker build -t kumard31/numeric-app:""$GIT_COMMIT"" .'
-                  sh 'docker push kumard31/numeric-app:""$GIT_COMMIT""'
-                }
+            steps {
+              docker.withRegistry('dockerhub') {
+                sh "printenv"
+                sh 'docker build -t kumard31/numeric-app:""$GIT_COMMIT"" .'
+                sh 'docker push kumard31/numeric-app:""$GIT_COMMIT""'
               }
-          }
+            }
+      }
   }        
 }
