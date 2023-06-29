@@ -22,7 +22,7 @@ pipeline {
     
       stage('image push') {
             steps {
-              docker.withRegistry('dockerhub') {
+              withDockerRegistry([credentialsID:'dockerhub', url:""]) {
                 sh "printenv"
                 sh 'docker build -t kumard31/numeric-app:""$GIT_COMMIT"" .'
                 sh 'docker push kumard31/numeric-app:""$GIT_COMMIT""'
