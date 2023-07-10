@@ -20,7 +20,7 @@ pipeline {
             }
         }   
 
-      stage('test phase') {
+      stage('PIT phase') {
             steps {
               sh "mvn org.pitest:pitest-maven:mutationCoverage"
             }
