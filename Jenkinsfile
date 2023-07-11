@@ -31,6 +31,23 @@ pipeline {
               }
             }
       } 
+
+      stage('SonarQube - SAST') {
+       steps {
+        withSonarQubeEnv('sonar-auth') {
+
+          sh "mvn clean verify sonar:sonar \
+             -Dsonar.projectKey=numeric-app \
+             -Dsonar.projectName='numeric-app' \
+             -Dsonar.host.url=http://mydevsecopsvm.eastus.cloudapp.azure.com:9000"
+          }
+        timeout(time: 2, unit: 'MINUTES') {
+          script {
+            waitForQualityGate abortPipeline: true
+          }
+        }
+      }
+    }
     
       stage('image push') {
             steps {
