@@ -32,14 +32,15 @@ pipeline {
             }
       } 
 
-      stage('SonarQube - SAST') {
+       stage('SonarQube - SAST') {
        steps {
         withSonarQubeEnv('sonar-auth') {
 
           sh "mvn clean verify sonar:sonar \
-             -Dsonar.projectKey=numeric-app \
-             -Dsonar.projectName='numeric-app' \
-             -Dsonar.host.url=http://mydevsecopsvm.eastus.cloudapp.azure.com:9000"
+              -Dsonar.projectKey=numeric-app \
+              -Dsonar.projectName='numeric-app' \
+              -Dsonar.host.url=http://mydevsecopsvm.eastus.cloudapp.azure.com:9000 \
+              -Dsonar.token=sqp_ef185d7d1ccf421a1fee9405de065656726ba3c6"
           }
         timeout(time: 2, unit: 'MINUTES') {
           script {
