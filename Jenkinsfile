@@ -34,7 +34,7 @@ pipeline {
 
        stage('SonarQube - SAST') {
        steps {
-        withSonarQubeEnv('sonar-auth') {
+        withSonarQubeEnv('sonarqube') {
 
           sh "mvn clean verify sonar:sonar \
               -Dsonar.projectKey=numeric-app \
