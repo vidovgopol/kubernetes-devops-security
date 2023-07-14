@@ -42,7 +42,7 @@ pipeline {
               -Dsonar.host.url=http://mydevsecopsvm.eastus.cloudapp.azure.com:9000 \
               -Dsonar.token=sqp_ef185d7d1ccf421a1fee9405de065656726ba3c6"
           }
-        timeout(time: 2, unit: 'MINUTES') {
+        timeout(time: 10, unit: 'MINUTES') {
           script {
             waitForQualityGate abortPipeline: true
           }
