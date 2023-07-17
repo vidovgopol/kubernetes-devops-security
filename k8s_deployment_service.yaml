@@ -16,7 +16,7 @@ spec:
         app: devsecops
     spec:
       containers:
-      - image: replace
+      - image: kumard31/numeric-app:latest
         name: devsecops-container
 ---
 apiVersion: v1
