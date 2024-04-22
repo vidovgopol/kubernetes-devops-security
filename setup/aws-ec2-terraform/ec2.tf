@@ -10,16 +10,16 @@ resource "aws_launch_template" "devsecops_template" {
 
   ebs_optimized = true
 
-  block_device_mappings {
-    device_name = "/dev/sda1"
+  # block_device_mappings {
+  #   device_name = "/dev/sda1"
 
-    ebs {
-      delete_on_termination = true
-      volume_size           = 512
-      volume_type           = "gp3"
-      iops                  = 3000
-    }
-  }
+  #   ebs {
+  #     delete_on_termination = true
+  #     volume_size           = 512
+  #     volume_type           = "gp3"
+  #     iops                  = 3000
+  #   }
+  # }
 
   description = "Spot Instance for staging environment"
 
@@ -39,25 +39,19 @@ resource "aws_launch_template" "devsecops_template" {
 
   network_interfaces {
     associate_public_ip_address = true
+    delete_on_termination       = true
+    ipv4_addresses = [
+      "10.1.36.125"
+    ]
     security_groups = [
       aws_security_group.devsecops_sg.id
     ]
   }
 
   update_default_version = true
-  image_id               = data.aws_ssm_parameter.ubuntu_image.value
-  user_data              = filebase64("startup-script.sh")
-  # user_data = base64encode(replace(
-  #   replace(
-  #     replace(
-  #       file(
-  #       "startup_script.sh"), "{{Config_Bucket_Name}}", var.configs_bucket_name
-  #     ),
-  #     "{{Backend_Git_Branch}}", var.backend_git_branch
-  #   ),
-  #   "{{Backend_Git_Url}}", var.backend_git_url
-  #   )
-  # )
+  # image_id               = data.aws_ssm_parameter.ubuntu_image.value
+  image_id = data.aws_ami.devsecops_jenkins_ami_image.image_id
+  # user_data              = filebase64("startup-script.sh")
 
   tag_specifications {
     resource_type = "instance"
