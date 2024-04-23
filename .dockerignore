@@ -1,7 +1,2 @@
-trivy
-hs_err_pid*
-.settings
-bin
-.classpath
-.project
-.vscode
+*
+!target

@@ -80,7 +80,7 @@ pipeline {
       steps {
         withDockerRegistry([credentialsId: "dockerhub", url: ""]) {
           sh 'printenv'
-          sh 'docker build -t ""$imageName"" .'
+          sh 'sudo docker build -t ""$imageName"" .'
           sh 'docker push ""$imageName""'
         }
       }
