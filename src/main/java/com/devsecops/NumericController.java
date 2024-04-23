@@ -2,6 +2,7 @@ package com.devsecops;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,12 +13,14 @@ import org.springframework.web.client.RestTemplate;
 public class NumericController {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
-	private static final String baseURL = "http://localhost:5000/plusone";
 	
 	RestTemplate restTemplate = new RestTemplate();
 	
 	@RestController
 	public class CompareValues {
+
+		@Autowired
+    	private BaseURL baseURL;
 
 		@GetMapping("/")
 		public String welcome() {
@@ -37,7 +40,7 @@ public class NumericController {
 
 		@GetMapping("/increment/{value}")
 		public int increment(@PathVariable int value) {
-			ResponseEntity<String> responseEntity = restTemplate.getForEntity(baseURL + '/' + value, String.class);
+			ResponseEntity<String> responseEntity = restTemplate.getForEntity(baseURL.getBaseURL() + '/' + value, String.class);
 			String response = responseEntity.getBody();
 			logger.info("Value Received in Request - " + value);
 			logger.info("Node Service Response - " + response);
