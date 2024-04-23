@@ -266,6 +266,27 @@ resource "aws_security_group" "devsecops_sg" {
     protocol         = "tcp"
     to_port          = 9000
   }
+  ingress {
+    cidr_blocks      = ["0.0.0.0/0"]
+    from_port        = 15021
+    ipv6_cidr_blocks = ["::/0"]
+    protocol         = "tcp"
+    to_port          = 15021
+  }
+  ingress {
+    cidr_blocks      = ["0.0.0.0/0"]
+    from_port        = 31400
+    ipv6_cidr_blocks = ["::/0"]
+    protocol         = "tcp"
+    to_port          = 31400
+  }
+  ingress {
+    cidr_blocks      = ["0.0.0.0/0"]
+    from_port        = 15443
+    ipv6_cidr_blocks = ["::/0"]
+    protocol         = "tcp"
+    to_port          = 15443
+  }
   egress {
     cidr_blocks = ["0.0.0.0/0"]
     from_port   = 0
