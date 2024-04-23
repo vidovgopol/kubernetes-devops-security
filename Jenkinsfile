@@ -5,7 +5,7 @@ pipeline {
     deploymentName = "devsecops"
     containerName = "devsecops-container"
     serviceName = "devsecops-svc"
-    imageName = "yinko2/devsecops:${GIT_COMMIT}"
+    imageName = "yinko2/numeric-app:${GIT_COMMIT}"
     devNamespace = "dev"
     applicationURL="https://devsecops.aungmyatkyaw.site"
     applicationURI="/increment/99"
@@ -76,22 +76,32 @@ pipeline {
       }
     }
 
-    stage('K8S Deployment - DEV') {
+    stage('Docker Build and Push') {
       steps {
-        parallel(
-          "Deployment": {
-            withKubeConfig([credentialsId: 'kubeconfig']) {
-              sh "bash k8s-deployment.sh"
-            }
-          },
-          "Rollout Status": {
-            withKubeConfig([credentialsId: 'kubeconfig']) {
-              sh "bash k8s-deployment-rollout-status.sh"
-            }
-          }
-        )
+        withDockerRegistry([credentialsId: "dockerhub", url: ""]) {
+          sh 'printenv'
+          sh 'docker build -t ""$imageName"" .'
+          sh 'docker push ""$imageName""'
+        }
       }
     }
+
+    // stage('K8S Deployment - DEV') {
+    //   steps {
+    //     parallel(
+    //       "Deployment": {
+    //         withKubeConfig([credentialsId: 'kubeconfig']) {
+    //           sh "bash k8s-deployment.sh"
+    //         }
+    //       },
+    //       "Rollout Status": {
+    //         withKubeConfig([credentialsId: 'kubeconfig']) {
+    //           sh "bash k8s-deployment-rollout-status.sh"
+    //         }
+    //       }
+    //     )
+    //   }
+    // }
 
   }
 }
