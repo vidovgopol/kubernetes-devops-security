@@ -23,22 +23,11 @@ pipeline {
       steps {
         sh "mvn test"
       }
-      post { 
-        always { 
-          junit 'target/surefire-reports/*.xml'
-          jacoco execPattern: 'target/jacoco.exec'
-        }
-      }
     }
 
     stage('Mutation Tests - PIT') {
       steps {
         sh "mvn org.pitest:pitest-maven:mutationCoverage"
-      }
-      post { 
-        always { 
-          pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
-        }
       }
     }
 
@@ -69,11 +58,6 @@ pipeline {
           }   	
       	)
       }
-      post { 
-        always { 
-          dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-        }
-      }
     }
 
     stage('Docker Build and Push') {
@@ -83,6 +67,22 @@ pipeline {
           sh 'sudo docker build -t ""$imageName"" .'
           sh 'docker push ""$imageName""'
         }
+      }
+    }
+
+    stage('Vulnerability Scan - Kubernetes') {
+      steps {
+        parallel(
+          "OPA Scan": {
+            sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-k8s-security.rego k8s_deployment_service.yaml'
+          },
+          "Kubesec Scan": {
+            sh "bash kubesec-scan.sh"
+          },
+          "Trivy Scan": {
+            sh "bash trivy-k8s-scan.sh"
+          }
+        )
       }
     }
 
@@ -102,6 +102,21 @@ pipeline {
     //     )
     //   }
     // }
+
+    post { 
+      always { 
+        junit 'target/surefire-reports/*.xml'
+        jacoco execPattern: 'target/jacoco.exec'
+        pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+        dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+        publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'owasp-zap-report', reportFiles: 'zap_report.html', reportName: 'OWASP ZAP HTML Report', reportTitles: 'OWASP ZAP HTML Report'])
+      }
+
+      success {
+      }
+
+	    failure {
+		  }
 
   }
 }
