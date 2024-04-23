@@ -21,6 +21,7 @@
 		<java.version>17</java.version>
 		<maven.compiler.source>17</maven.compiler.source>
     	<maven.compiler.target>17</maven.compiler.target>
+		<snakeyaml.version>2.0</snakeyaml.version>
 	</properties>
 
 	<dependencies>
@@ -125,7 +126,7 @@
 				<version>7.3.0</version>
 				<configuration>
 					<format>ALL</format>
-					<failBuildOnCVSS>10</failBuildOnCVSS> <!-- fail the build for CVSS greater than or equal to 9 -->
+					<failBuildOnCVSS>8</failBuildOnCVSS> <!-- fail the build for CVSS greater than or equal to 9 -->
 
 					<!-- 
 					use internal mirroring of CVE contents 
