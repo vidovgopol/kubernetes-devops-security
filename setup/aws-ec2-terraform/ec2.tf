@@ -21,7 +21,7 @@ resource "aws_launch_template" "devsecops_template" {
   #   }
   # }
 
-  description = "Spot Instance for staging environment"
+  description = "Spot Instance for devsecops jenkins"
 
   credit_specification {
     cpu_credits = "standard"
@@ -34,15 +34,13 @@ resource "aws_launch_template" "devsecops_template" {
   }
 
   monitoring {
-    enabled = false
+    enabled = true
   }
 
   network_interfaces {
     associate_public_ip_address = true
     delete_on_termination       = true
-    ipv4_addresses = [
-      "10.1.36.125"
-    ]
+    private_ip_address          = "10.1.36.125"
     security_groups = [
       aws_security_group.devsecops_sg.id
     ]
@@ -260,6 +258,13 @@ resource "aws_security_group" "devsecops_sg" {
     ipv6_cidr_blocks = ["::/0"]
     protocol         = "tcp"
     to_port          = 8080
+  }
+  ingress {
+    cidr_blocks      = ["0.0.0.0/0"]
+    from_port        = 9000
+    ipv6_cidr_blocks = ["::/0"]
+    protocol         = "tcp"
+    to_port          = 9000
   }
   egress {
     cidr_blocks = ["0.0.0.0/0"]
