@@ -35,7 +35,7 @@ pipeline {
     stage('SonarQube - SAST') {
       steps {
         withSonarQubeEnv('sonarqube') {
-          sh "mvn sonar:sonar -Dsonar.qualitygate.wait=true -Dsonar.analysis.mode=publish" 
+          sh "mvn sonar:sonar -Dsonar.analysis.mode=publish" 
         }
         timeout(time: 2, unit: 'MINUTES') {
           script {
