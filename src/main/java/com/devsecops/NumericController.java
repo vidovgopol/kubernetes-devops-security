@@ -19,8 +19,12 @@ public class NumericController {
 	@RestController
 	public class CompareValues {
 
+    	private final String baseURL;
+
 		@Autowired
-    	private BaseURL baseURL;
+		public CompareValues(Properties properties) {
+			baseURL = properties.getBaseURL();
+		}
 
 		@GetMapping("/")
 		public String welcome() {
@@ -40,7 +44,7 @@ public class NumericController {
 
 		@GetMapping("/increment/{value}")
 		public int increment(@PathVariable int value) {
-			ResponseEntity<String> responseEntity = restTemplate.getForEntity(baseURL.getBaseURL() + '/' + value, String.class);
+			ResponseEntity<String> responseEntity = restTemplate.getForEntity(baseURL + '/' + value, String.class);
 			String response = responseEntity.getBody();
 			logger.info("Value Received in Request - " + value);
 			logger.info("Node Service Response - " + response);

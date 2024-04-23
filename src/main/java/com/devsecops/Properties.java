@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BaseURL {
+public class Properties {
 
     @Value("${base.url}")
     private String baseURL;
