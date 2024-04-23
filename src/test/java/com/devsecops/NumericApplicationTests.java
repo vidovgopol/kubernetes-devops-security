@@ -16,13 +16,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class) // Enable Spring support for JUnit 5
-public class NumericApplicationTests {
+class NumericApplicationTests {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    public void testSmallerThanOrEqualToFiftyMessage() throws Exception {
+    void testSmallerThanOrEqualToFiftyMessage() throws Exception {
         this.mockMvc.perform(get("/compare/50"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -30,7 +30,7 @@ public class NumericApplicationTests {
     }
 
     @Test
-    public void testGreaterThanFiftyMessage() throws Exception {
+    void testGreaterThanFiftyMessage() throws Exception {
         this.mockMvc.perform(get("/compare/51"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -38,7 +38,7 @@ public class NumericApplicationTests {
     }
 
     @Test
-    public void testIncrementCheck() throws Exception {
+    void testIncrementCheck() throws Exception {
         this.mockMvc.perform(get("/increment/99"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -46,7 +46,7 @@ public class NumericApplicationTests {
     }
     
     @Test
-    public void testWelcomeMessage() throws Exception {
+    void testWelcomeMessage() throws Exception {
         this.mockMvc.perform(get("/"))
                 .andDo(print())
                 .andExpect(status().isOk())
