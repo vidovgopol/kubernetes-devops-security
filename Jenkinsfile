@@ -1,6 +1,16 @@
 pipeline {
   agent any
 
+  environment {
+    deploymentName = "devsecops"
+    containerName = "devsecops-container"
+    serviceName = "devsecops-svc"
+    imageName = "yinko2/devsecops:${GIT_COMMIT}"
+    devNamespace = "dev"
+    applicationURL="https://devsecops.aungmyatkyaw.site"
+    applicationURI="/increment/99"
+  }
+
   stages {
     stage('Build Artifact') {
       steps {
@@ -63,6 +73,23 @@ pipeline {
         always { 
           dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
         }
+      }
+    }
+
+    stage('K8S Deployment - DEV') {
+      steps {
+        parallel(
+          "Deployment": {
+            withKubeConfig([credentialsId: 'kubeconfig']) {
+              sh "bash k8s-deployment.sh"
+            }
+          },
+          "Rollout Status": {
+            withKubeConfig([credentialsId: 'kubeconfig']) {
+              sh "bash k8s-deployment-rollout-status.sh"
+            }
+          }
+        )
       }
     }
 
