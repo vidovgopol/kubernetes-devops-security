@@ -18,18 +18,35 @@ spec:
       volumes:
       - name: vol
         emptyDir: {}
+      - name: spring-config
+        configMap:
+          name: devsecops-config
       serviceAccountName: default
       automountServiceAccountToken: false
       containers:
-      - image: replace
+      - image: DEPLOY_IMAGE
         name: devsecops-container
         volumeMounts:
         - mountPath: /tmp
           name: vol
+        - name: spring-config
+          mountPath: /config
         securityContext:
           runAsNonRoot: true
           runAsUser: 100
           readOnlyRootFilesystem: true
+        env:
+        - name: SPRING_CONFIG_LOCATION
+          value: /config/application.properties
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: devsecops-config
+data:
+  application.properties: |
+    server.port=8080
+    base.url=BASE_URL
 ---
 apiVersion: v1
 kind: Service

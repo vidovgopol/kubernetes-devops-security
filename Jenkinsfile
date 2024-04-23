@@ -8,6 +8,7 @@ pipeline {
     imageName = "yinko2/numeric-app:${GIT_COMMIT}"
     devNamespace = "dev"
     applicationURL="https://devsecops.aungmyatkyaw.site"
+    baseURL = "http://node-service:5000/plusone"
     applicationURI="/increment/99"
   }
 
