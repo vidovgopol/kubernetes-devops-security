@@ -49,3 +49,20 @@ variable "subscription_emails" {
   type        = list(string)
   default     = ["aungmyatkyaw.kk@gmail.com"]
 }
+
+variable "istio_ingress_gateway_nodeport" {
+  description = "NodePort Number for Istio Ingress Gateway"
+  type        = number
+  default     = 30593
+}
+
+variable "cloudflare_api_token" {
+  description = "API Token for cloudflare"
+  type        = string
+}
+
+variable "cloudflare_website_name" {
+  description = "Website name"
+  type        = string
+  default     = "aungmyatkyaw.site"
+}

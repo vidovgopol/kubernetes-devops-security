@@ -15,7 +15,7 @@ resource "aws_launch_template" "devsecops_template" {
 
   #   ebs {
   #     delete_on_termination = true
-  #     volume_size           = 512
+  #     volume_size           = 50
   #     volume_type           = "gp3"
   #     iops                  = 3000
   #   }
@@ -286,6 +286,13 @@ resource "aws_security_group" "devsecops_sg" {
     ipv6_cidr_blocks = ["::/0"]
     protocol         = "tcp"
     to_port          = 15443
+  }
+  ingress {
+    cidr_blocks      = ["0.0.0.0/0"]
+    from_port        = var.istio_ingress_gateway_nodeport
+    ipv6_cidr_blocks = ["::/0"]
+    protocol         = "tcp"
+    to_port          = var.istio_ingress_gateway_nodeport
   }
   egress {
     cidr_blocks = ["0.0.0.0/0"]
