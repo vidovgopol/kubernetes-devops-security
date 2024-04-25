@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: devsecops
+  name: devsecops
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: devsecops
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: devsecops
+    spec:
+      serviceAccountName: default
+      volumes:
+      - name: vol
+        emptyDir: {}
+      - name: spring-config
+        configMap:
+          name: devsecops-config
+      containers:
+      - image: DEPLOY_IMAGE
+        name: devsecops-container
+        volumeMounts:
+          - mountPath: /tmp
+            name: vol
+          - name: spring-config
+            mountPath: /config
+        securityContext:
+          capabilities:
+            drop:
+             - NET_RAW
+          runAsUser: 100
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+        env:
+        - name: SPRING_CONFIG_LOCATION
+          value: /config/application.properties
+        resources:
+         requests:
+          memory: "256Mi"
+          cpu: "200m"
+         limits:
+          memory: "512Mi"
+          cpu: "500m"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: devsecops-config
+data:
+  application.properties: |
+    server.port=8080
+    base.url=BASE_URL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: devsecops
+  name: devsecops-svc
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: devsecops
+  type: ClusterIP
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: devsecops-vs
+spec:
+  gateways:
+  - istio-system/devsecops-gateway
+  hosts:
+  - PROD_WEBSITE_URL
+  http:
+  - route:
+    - destination:
+        host: devsecops-svc
+        port:
+          number: 8080

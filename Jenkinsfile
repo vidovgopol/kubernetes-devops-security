@@ -7,7 +7,9 @@ pipeline {
     serviceName = "devsecops-svc"
     imageName = "yinko2/numeric-app:${GIT_COMMIT}"
     devNamespace = "dev"
-    applicationURL="https://devsecops.aungmyatkyaw.site"
+    prodNamespace = "prod"
+    applicationURL = "https://devsecops.aungmyatkyaw.site"
+    prodApplicationURL = "https://numeric.aungmyatkyaw.site"
     baseURL = "http://node-service:5000/plusone"
     applicationURI="/increment/99"
   }
@@ -156,6 +158,43 @@ pipeline {
         }
       }
     }
+
+    stage('K8S Deployment - PROD') {
+      steps {
+        parallel(
+          "Deployment": {
+            withKubeConfig([credentialsId: 'kubeconfig']) {
+              sh "sed -i "s#DEPLOY_IMAGE#${imageName}#g" k8s_PROD-deployment_service.yaml"
+              sh "sed -i "s#BASE_URL#${baseURL}#g" k8s_PROD-deployment_service.yaml"
+              sh "sed -i "s#PROD_WEBSITE_URL#${prodApplicationURL}#g" k8s_PROD-deployment_service.yaml"
+              sh "kubectl -n prod apply -f k8s_PROD-deployment_service.yaml"
+            }
+          },
+          "Rollout Status": {
+            withKubeConfig([credentialsId: 'kubeconfig']) {
+              sh "bash k8s-PROD-deployment-rollout-status.sh"
+            }
+          }
+        )
+      }
+    }
+
+    stage('Integration Tests - PROD') {
+      steps {
+        script {
+          try {
+            withKubeConfig([credentialsId: 'kubeconfig']) {
+              sh "bash integration-test-PROD.sh"
+            }
+          } catch (e) {
+            withKubeConfig([credentialsId: 'kubeconfig']) {
+              sh "kubectl -n ${prodNamespace} rollout undo deploy ${deploymentName}"
+            }
+            throw e
+          }
+        }
+      }
+    }   
   }
 
   post { 

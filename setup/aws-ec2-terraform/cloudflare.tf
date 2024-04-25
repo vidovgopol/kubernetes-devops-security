@@ -38,3 +38,13 @@ resource "cloudflare_record" "devsecops" {
   value           = aws_lb.devsecops_jenkins_nlb.dns_name
   zone_id         = data.cloudflare_zone.aungmyatkyaw_site.id
 }
+
+resource "cloudflare_record" "numeric" {
+  name            = "numeric"
+  proxied         = true
+  ttl             = 1
+  type            = "CNAME"
+  allow_overwrite = true
+  value           = aws_lb.devsecops_jenkins_nlb.dns_name
+  zone_id         = data.cloudflare_zone.aungmyatkyaw_site.id
+}
