@@ -61,15 +61,15 @@ pipeline {
     //   }
     // }
 
-    // stage('Docker Build and Push') {
-    //   steps {
-    //     withDockerRegistry([credentialsId: "dockerhub", url: ""]) {
-    //       sh 'printenv'
-    //       sh 'sudo docker build -t ""$imageName"" .'
-    //       sh 'docker push ""$imageName""'
-    //     }
-    //   }
-    // }
+    stage('Docker Build and Push') {
+      steps {
+        withDockerRegistry([credentialsId: "dockerhub", url: ""]) {
+          sh 'printenv'
+          sh 'sudo docker build -t ""$imageName"" .'
+          sh 'docker push ""$imageName""'
+        }
+      }
+    }
 
     // stage('Vulnerability Scan - Kubernetes') {
     //   steps {
