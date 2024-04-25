@@ -22,46 +22,46 @@ pipeline {
       }
     }
 
-    // stage('Unit Tests - JUnit and JaCoCo') {
-    //   steps {
-    //     sh "mvn test"
-    //   }
-    // }
+    stage('Unit Tests - JUnit and JaCoCo') {
+      steps {
+        sh "mvn test"
+      }
+    }
 
-    // stage('Mutation Tests - PIT') {
-    //   steps {
-    //     sh "mvn org.pitest:pitest-maven:mutationCoverage"
-    //   }
-    // }
+    stage('Mutation Tests - PIT') {
+      steps {
+        sh "mvn org.pitest:pitest-maven:mutationCoverage"
+      }
+    }
 
-    // stage('SonarQube - SAST') {
-    //   steps {
-    //     withSonarQubeEnv('sonarqube') {
-    //       sh "mvn sonar:sonar -Dsonar.analysis.mode=publish" 
-    //     }
-    //     timeout(time: 2, unit: 'MINUTES') {
-    //       script {
-    //         waitForQualityGate abortPipeline: true
-    //       }
-    //     }
-    //   }
-    // }
+    stage('SonarQube - SAST') {
+      steps {
+        withSonarQubeEnv('sonarqube') {
+          sh "mvn sonar:sonar -Dsonar.analysis.mode=publish" 
+        }
+        timeout(time: 2, unit: 'MINUTES') {
+          script {
+            waitForQualityGate abortPipeline: true
+          }
+        }
+      }
+    }
 
-    // stage('Vulnerability Scan - Docker') {
-    //   steps {
-    //     parallel(
-    //     	"Dependency Scan": {
-    //     		sh "mvn dependency-check:check"
-    //       },
-    //       "Trivy Scan":{
-    //         sh "bash trivy-docker-image-scan.sh"
-    //       },
-    //       "OPA Conftest":{
-    //         sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile'
-    //       }   	
-    //   	)
-    //   }
-    // }
+    stage('Vulnerability Scan - Docker') {
+      steps {
+        parallel(
+        	"Dependency Scan": {
+        		sh "mvn dependency-check:check"
+          },
+          "Trivy Scan":{
+            sh "bash trivy-docker-image-scan.sh"
+          },
+          "OPA Conftest":{
+            sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile'
+          }   	
+      	)
+      }
+    }
 
     stage('Docker Build and Push') {
       steps {
@@ -73,21 +73,21 @@ pipeline {
       }
     }
 
-    // stage('Vulnerability Scan - Kubernetes') {
-    //   steps {
-    //     parallel(
-    //       "OPA Scan": {
-    //         sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-k8s-security.rego k8s_deployment_service.yaml'
-    //       },
-    //       "Kubesec Scan": {
-    //         sh "bash kubesec-scan.sh"
-    //       },
-    //       "Trivy Scan": {
-    //         sh "bash trivy-k8s-scan.sh"
-    //       }
-    //     )
-    //   }
-    // }
+    stage('Vulnerability Scan - Kubernetes') {
+      steps {
+        parallel(
+          "OPA Scan": {
+            sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-k8s-security.rego k8s_deployment_service.yaml'
+          },
+          "Kubesec Scan": {
+            sh "bash kubesec-scan.sh"
+          },
+          "Trivy Scan": {
+            sh "bash trivy-k8s-scan.sh"
+          }
+        )
+      }
+    }
 
     stage('K8S Deployment - DEV') {
       steps {
@@ -123,13 +123,13 @@ pipeline {
       }
     }
 
-    // stage('OWASP ZAP - DAST') {
-    //   steps {
-    //     withKubeConfig([credentialsId: 'kubeconfig']) {
-    //       sh 'bash zap.sh'
-    //     }
-    //   }
-    // }
+    stage('OWASP ZAP - DAST') {
+      steps {
+        withKubeConfig([credentialsId: 'kubeconfig']) {
+          sh 'bash zap.sh'
+        }
+      }
+    }
 
     stage('Prompte to PROD?') {
       steps {
@@ -200,7 +200,7 @@ pipeline {
       jacoco execPattern: 'target/jacoco.exec'
       pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
       dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-      // publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'owasp-zap-report', reportFiles: 'zap_report.html', reportName: 'OWASP ZAP HTML Report', reportTitles: 'OWASP ZAP HTML Report'])
+      publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'owasp-zap-report', reportFiles: 'zap_report.html', reportName: 'OWASP ZAP HTML Report', reportTitles: 'OWASP ZAP HTML Report'])
     }
 
     // success {
