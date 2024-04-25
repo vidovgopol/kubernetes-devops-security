@@ -164,9 +164,9 @@ pipeline {
         parallel(
           "Deployment": {
             withKubeConfig([credentialsId: 'kubeconfig']) {
-              sh "sed -i "s#DEPLOY_IMAGE#${imageName}#g" k8s_PROD-deployment_service.yaml"
-              sh "sed -i "s#BASE_URL#${baseURL}#g" k8s_PROD-deployment_service.yaml"
-              sh "sed -i "s#PROD_WEBSITE_URL#${prodApplicationURL}#g" k8s_PROD-deployment_service.yaml"
+              sh "sed -i 's#DEPLOY_IMAGE#${imageName}#g' k8s_PROD-deployment_service.yaml"
+              sh "sed -i 's#BASE_URL#${baseURL}#g' k8s_PROD-deployment_service.yaml"
+              sh "sed -i 's#PROD_WEBSITE_URL#${prodApplicationURL}#g' k8s_PROD-deployment_service.yaml"
               sh "kubectl -n prod apply -f k8s_PROD-deployment_service.yaml"
             }
           },
