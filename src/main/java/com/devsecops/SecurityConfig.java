@@ -16,7 +16,14 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/**").permitAll()
                 .anyRequest().authenticated()
-            );
+            )
+            .headers(headers -> headers
+				.httpStrictTransportSecurity(hsts -> hsts
+					.includeSubDomains(true)
+					.preload(true)
+					.maxAgeInSeconds(31536000)
+				)
+			);
 
         return http.build();
     }
