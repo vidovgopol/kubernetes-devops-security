@@ -21,7 +21,17 @@ pipeline {
         }
       }
     }
-
+    // Add PIT Mutation Test
+    stage('Mutation Tests - PIT') {
+      steps {
+        sh "mvn org.pitest:pitest-maven:mutationCoverage"
+      }
+      post {
+        always {
+          pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+        }
+      }
+    }
     stage('Docker image build and push') {
       steps {
         sh 'docker build -t docker-registry:5000/java-app:latest .'
