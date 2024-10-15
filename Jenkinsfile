@@ -32,6 +32,41 @@ pipeline {
         }
       }
     }
+    stage('Vulnerability Tests') {
+      steps {
+        sh "mvn dependency-check:check"
+      }
+      post {
+        always {
+          dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+        }
+      }
+    }
+    
+     // For default
+    // stage('SonarQube') {
+    //   steps {
+    //     sh "mvn clean verify sonar:sonar \
+    //         -Dsonar.projectKey=devsecops-numeric-application \
+    //         -Dsonar.host.url=https://30012-port-1e4dabbbcbcf4fbb.labs.kodekloud.com \
+    //         -Dsonar.login=sqp_752334d1feca934931e032a5799dc5865ffef3c2"
+    //   }
+    // }
+    // For custom  Quality Gates
+    stage('SonarQube - SAST') {
+      steps {
+        withSonarQubeEnv('sonarqube') {
+          sh "mvn sonar:sonar \
+              -Dsonar.projectKey=devsecops-numeric-application \
+              -Dsonar.host.url=<sonarqube-server-url>"
+      }
+        timeout(time: 2, unit: 'MINUTES') {
+          script {
+            waitForQualityGate abortPipeline: true
+          }
+        }
+      }
+    }
     stage('Docker image build and push') {
       steps {
         sh 'docker build -t docker-registry:5000/java-app:latest .'
