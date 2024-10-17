@@ -1,0 +1,74 @@
+pipeline {
+  agent any
+
+  environment {
+    deploymentName = "devsecops"
+    containerName = "devsecops-container"
+    serviceName = "devsecops-svc"
+    imageName = "docker-registry:5000/java-app:latest"
+    applicationURL = "http://controlplane"
+    applicationURI = "/increment/99"
+  }
+
+  stages {
+
+    stage('Build Artifact - Maven') {
+      steps {
+        sh "mvn clean package -DskipTests=true"
+        archive 'target/*.jar'
+      }
+    }
+
+    stage('Unit Tests - JUnit and JaCoCo') {
+      steps {
+        sh "mvn test"
+      }
+    }
+
+    stage('Mutation Tests - PIT') {
+      steps {
+        sh "mvn org.pitest:pitest-maven:mutationCoverage"
+      }
+    }
+
+    stage('Docker Build and Push') {
+      steps {
+          sh 'sudo docker build -t docker-registry:5000/java-app:latest .'
+          sh 'docker push docker-registry:5000/java-app:latest'
+      }
+    }
+
+    stage('K8S Deployment - DEV') {
+      steps {
+        parallel(
+          "Deployment": {
+              sh "bash k8s-deployment.sh"
+          },
+          "Rollout Status": {
+              sh "bash k8s-deployment-rollout-status.sh"
+          }
+        )
+      }
+    }
+    stage('Promote to Prod') {
+      agent{
+        label "controlplane"
+      }
+      steps {
+          sh 'bash cis-etcd.sh'
+          sh 'bash cis-master.sh'
+          sh 'bash cis-node.sh'
+      }
+    }
+
+  }
+
+  post {
+    always {
+      junit 'target/surefire-reports/*.xml'
+      jacoco execPattern: 'target/jacoco.exec'
+    }
+
+  }
+
+}
