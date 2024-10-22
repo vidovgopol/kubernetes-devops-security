@@ -17,8 +17,18 @@ stage('Unit testing') {
                 junit 'target/surefire-reports/*.xml'
                 jacoco execPattern: 'target/jacoco.exec'
         }
+            stage('Docker Build and Push') {
+          steps {
+            
+              sh 'printenv'
+              sh 'sudo docker build -t abhix01/numeric-app:""$GIT_COMMIT"" .'
+              sh 'docker push abhix01/numeric-app:""$GIT_COMMIT""'
+            }
+          }
+        }
         } 
 }  
+}  
 
-    }
-}
+    
+
