@@ -17,7 +17,8 @@ stage('Unit testing') {
                 junit 'target/surefire-reports/*.xml'
                 jacoco execPattern: 'target/jacoco.exec'
         }
-        }   
+        } 
+}  
 
     }
 }
