@@ -38,4 +38,3 @@ stage('Unit testing') {
       }
     }
   }
-}
