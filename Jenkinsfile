@@ -9,7 +9,7 @@ pipeline {
             }
         }   
   }
-stage('Unit testing') {
+       stage('Unit testing') {
             steps {
               sh "mvn test"
             }
@@ -40,6 +40,7 @@ stage('Unit testing') {
         }
       }
     } 
+    
     stage('K8S Deployment - DEV') {
       steps {
          
