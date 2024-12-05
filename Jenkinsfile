@@ -23,14 +23,14 @@ stage('Unit testing') {
 
  
           stage('SonarQube Analysis') {
-            def mvn = tool 'Default Maven';
-            withSonarQubeEnv() {
-              sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=devsecops-numeric-application -Dsonar.projectName='devsecops-numeric-application'"
-            }
+                def mvn = tool 'Default Maven';
+                withSonarQubeEnv() {
+                  sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=devsecops-numeric-application -Dsonar.projectName='devsecops-numeric-application'"
+                }
           }
 
 
-        }
+        
             stage('Docker Build and Push') {
       steps {
         withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
@@ -49,5 +49,5 @@ stage('Unit testing') {
             }
       }
     }
-  
+}
 
