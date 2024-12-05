@@ -8,6 +8,7 @@ pipeline {
               archive 'target/*.jar' ///
             }
         }   
+  }
 stage('Unit testing') {
             steps {
               sh "mvn test"
@@ -20,10 +21,14 @@ stage('Unit testing') {
             } 
 }
 
-        stage('SonarQube - SAST') {
-              steps {
-                    sh "mvn sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.host.url=http://devsecops-demo.eastus.cloudapp.azure.com:9000 -Dsonar.login=sqp_a62c6cb180c9d84dc7f72147d34c60d1b9782bc5"
-                  }
+ 
+          stage('SonarQube Analysis') {
+            def mvn = tool 'Default Maven';
+            withSonarQubeEnv() {
+              sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=devsecops-numeric-application -Dsonar.projectName='devsecops-numeric-application'"
+            }
+          }
+
 
         }
             stage('Docker Build and Push') {
@@ -45,4 +50,4 @@ stage('Unit testing') {
       }
     }
   }
-}
+
