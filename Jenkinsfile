@@ -18,7 +18,30 @@ stage('Unit testing') {
                 jacoco execPattern: 'target/jacoco.exec'
         }
             } 
-            }       
+            }     
+
+             stage('Mutation Tests - PIT') {
+                steps {
+                  sh "mvn org.pitest:pitest-maven:mutationCoverage"  
+                }
+                 post {
+                  always{
+                    pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+                  }
+                 } 
+             } 
+
+              stage('SonarQube - SAST') {
+                    steps {
+                      withSonarQubeEnv('SonarQube') {
+                        sh "mvn sonar:sonar \
+                 	              -Dsonar.projectKey=numeric-application 
+                 	              -Dsonar.host.url=http://devsecops-demo.eastus.cloudapp.azure.com:9000
+                                -Dsonar.login=sqp_27fe0099c07c6d3550d4d87771bb25d33e8a5839"
+         }
+                    }
+              }
+
             stage('Docker Build and Push') {
       steps {
         withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
