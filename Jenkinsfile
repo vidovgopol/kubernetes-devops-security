@@ -32,16 +32,14 @@ stage('Unit testing') {
              } 
 
               
-                    stage('SCM') {
-                      checkout scm
-                    }
+                    
+        
                     stage('SonarQube Analysis') {
-                      def mvn = tool 'Default Maven';
-                      withSonarQubeEnv() {
+                      steps{
                         sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=devsecops-numeric-application -Dsonar.projectName='devsecops-numeric-application'"
                       }
                     }
-                  
+  
 
             stage('Docker Build and Push') {
       steps {
