@@ -31,14 +31,17 @@ stage('Unit testing') {
                  } 
              } 
 
-              stage('SonarQube - SAST') {
-                    steps {
-                      withSonarQubeEnv('SonarQube') {
-                        sh "mvn sonar:sonar \
-                 	              -Dsonar.projectKey=devsecops-numeric-application -Dsonar.host.url=http://devsecops-demo.eastus.cloudapp.azure.com:9000 -Dsonar.login=sqp_e15a68f2136a1e8b685899ecd29030d023983671"
-         }
+              node {
+                    stage('SCM') {
+                      checkout scm
                     }
-              }
+                    stage('SonarQube Analysis') {
+                      def mvn = tool 'Default Maven';
+                      withSonarQubeEnv() {
+                        sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=devsecops-numeric-application -Dsonar.projectName='devsecops-numeric-application'"
+                      }
+                    }
+                  }
 
             stage('Docker Build and Push') {
       steps {
