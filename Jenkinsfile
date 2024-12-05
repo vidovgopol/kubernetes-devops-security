@@ -35,9 +35,9 @@ stage('Unit testing') {
                     steps {
                       withSonarQubeEnv('SonarQube') {
                         sh "mvn sonar:sonar \
-                 	              -Dsonar.projectKey=numeric-application 
+                 	              -Dsonar.projectKey=devsecops-numeric-application 
                  	              -Dsonar.host.url=http://devsecops-demo.eastus.cloudapp.azure.com:9000
-                                -Dsonar.login=sqp_27fe0099c07c6d3550d4d87771bb25d33e8a5839"
+                                -Dsonar.login=sqp_e15a68f2136a1e8b685899ecd29030d023983671"
          }
                     }
               }
