@@ -21,12 +21,10 @@ stage('Unit testing') {
 }
 
         stage('SonarQube - SAST') {
-            steps {
-                  sh "mvn sonar:sonar \
-                        -Dsonar.projectKey=numeric-application \
-                          -Dsonar.host.url=http://devsecops-demo.eastus.cloudapp.azure.com:9000 \
-                          -Dsonar.login=sqp_a62c6cb180c9d84dc7f72147d34c60d1b9782bc5"
-                }
+              steps {
+                    sh "mvn sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.host.url=http://devsecops-demo.eastus.cloudapp.azure.com:9000 -Dsonar.login=sqp_a62c6cb180c9d84dc7f72147d34c60d1b9782bc5"
+                  }
+
             stage('Docker Build and Push') {
       steps {
         withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
