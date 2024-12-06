@@ -23,9 +23,8 @@ pipeline {
 
     stage('SonarQube Analysis') {
       steps {
-        withSonarQubeEnv() {
+     
           sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=devsecops-numeric-application -Dsonar.projectName="devsecops-numeric-application"'
-        }
       }
     }
 
