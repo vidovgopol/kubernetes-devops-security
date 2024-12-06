@@ -24,7 +24,7 @@ pipeline {
     stage('SonarQube Analysis') {
       steps {
      
-          sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=devsecops-numeric-application -Dsonar.projectName="devsecops-numeric-application"'
+          sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=devsecops-numeric-application -Dsonar.host.url=http://devsecops-demo.eastus.cloudapp.azure.com:9000 -Dsonar.login=sqa_a14d0e882c2f317164d9e58c2090c9474d88259b '
       }
     }
 
