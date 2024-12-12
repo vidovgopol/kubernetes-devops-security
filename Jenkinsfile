@@ -32,7 +32,7 @@ pipeline {
    }
      stage('Vulnerability Scan - Docker') {
       steps {
-         parellel(
+         parallel(
           "Dependency scan" : {
         		sh "mvn dependency-check:check"
 	 		},
