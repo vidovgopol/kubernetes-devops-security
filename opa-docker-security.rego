@@ -38,7 +38,7 @@ contains_any(val, secrets_env) {
     #val := split(input[i].Value[0], "/")
     #count(val) > 1
     #msg = sprintf("Line %d: use a trusted base image", [i])
-}
+#}
 
 # Do not use 'latest' tag for base images
 deny[msg] {
