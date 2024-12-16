@@ -18,8 +18,8 @@ deny[msg] {
     some i
     input[i].Cmd == "env"
     val := input[i].Value
-    # Iterate over the secrets_env and check if any secret exists in val
     secret_found := false
+    # Iterate over the secrets_env and check if any secret exists in val
     secret_found = contains_any(val, secrets_env)
     secret_found
     msg = sprintf("Line %d: Potential secret in ENV key found: %s", [i, val])
@@ -96,7 +96,7 @@ forbidden_users = [
 
 deny[msg] {
     some i
-    users := [name | input[i].Cmd == "user"; name := input[i].Value]
+    users := [name | some j; input[j].Cmd == "user"; name := input[j].Value]
     lastuser := users[count(users)-1]
     lastuser != ""  # Ensure that there is a valid user before checking
     contains(lower(lastuser), forbidden_users[_])  # Safe iteration on 'forbidden_users'
