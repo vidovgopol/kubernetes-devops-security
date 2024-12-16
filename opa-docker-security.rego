@@ -18,7 +18,7 @@ deny[msg] {
     some i
     input[i].Cmd == "env"
     val := input[i].Value
-    contains(lower(val[_]), secrets_env[_])
+    contains_any(lower(val), secrets_env)
     msg = sprintf("Line %d: Potential secret in ENV key found: %s", [i, val])
 }
 
@@ -87,9 +87,9 @@ forbidden_users = [
 
 deny[msg] {
     some i
-    command := "user"
     users := [name | input[i].Cmd == "user"; name := input[i].Value]
-    lastuser := users[count(users)-1]  # Ensure this is accessing a valid index
+    lastuser := users[count(users)-1]
+    lastuser != ""  # Ensure that there is a valid user before checking
     contains(lower(lastuser), forbidden_users[_])  # Safe iteration on 'forbidden_users'
     msg = sprintf("Line %d: Last USER directive (USER %s) is forbidden", [i, lastuser])
 }
