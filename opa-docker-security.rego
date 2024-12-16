@@ -18,8 +18,17 @@ deny[msg] {
     some i
     input[i].Cmd == "env"
     val := input[i].Value
-    contains_any(lower(val), secrets_env)
+    # Iterate over the secrets_env and check if any secret exists in val
+    secret_found := false
+    secret_found = contains_any(val, secrets_env)
+    secret_found
     msg = sprintf("Line %d: Potential secret in ENV key found: %s", [i, val])
+}
+
+# Helper function to check if any item in secrets_env is in the value
+contains_any(val, secrets_env) {
+    some j
+    contains(lower(val), secrets_env[j])
 }
 
 # Only use trusted base images
