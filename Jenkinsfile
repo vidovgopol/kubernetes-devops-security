@@ -16,7 +16,7 @@ pipeline {
       
     }
 
-    stage('SonarQube Analysis') {
+   /*stage('SonarQube Analysis') {
       steps {
          withSonarQubeEnv('SonarQube') {
      
@@ -29,7 +29,7 @@ pipeline {
        
          }
        }
-   }
+   }*/
      stage('Vulnerability Scan - Docker') {
       steps {
          parallel(
@@ -40,9 +40,9 @@ pipeline {
 	 			sh "bash trivy-docker-image-scan.sh"
 		},
 
-    "OPA Conftest" : {
+   /* "OPA Conftest" : {
 	 			sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile'
-		}   	
+		}*/   	
          )
       }
      } 
@@ -54,6 +54,14 @@ pipeline {
           sh 'docker push abhix01/numeric-app:${GIT_COMMIT}'
         }
       }
+    }
+
+    stage('Vulnerability Scan - Kubernetes') {
+      steps {
+          "OPA Scan": {
+            sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-k8s-security.rego k8s_deployment_service.yaml'
+           }
+      } 
     }
 
     stage('K8S Deployment - DEV') {
