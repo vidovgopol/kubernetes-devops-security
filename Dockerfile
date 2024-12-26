@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk8:alpine-slim
+FROM eclipse-temurin
 EXPOSE 8080
 ARG JAR_FILE=target/*.jar
 RUN addgroup  pipeline && adduser  k8s-pipeline -G pipeline
