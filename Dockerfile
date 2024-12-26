@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk8:alpine-slim
+FROM arm64v8/openjdk
 EXPOSE 8080
 ARG JAR_FILE=target/*.jar
 RUN apk add --no-cache shadow && \
