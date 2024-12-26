@@ -1,4 +1,4 @@
-FROM openjdk:8-alpine
+FROM eclipse-temurin
 EXPOSE 8080
 ARG JAR_FILE=target/*.jar
 RUN addgroup -S pipeline && adduser -S k8s-pipeline -G pipeline
