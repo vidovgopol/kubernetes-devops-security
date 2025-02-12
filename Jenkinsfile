@@ -1,7 +1,6 @@
 pipeline {
     agent {
-        label 'local' // Ensure this matches the label of your local agent
-    }
+        label 'local' 
   stages {
       stage('Build Artifact') {
             steps {
